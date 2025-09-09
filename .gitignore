@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Envs
+.venv/
+venv/
+env/
+
+# Build/Dist
+build/
+dist/
+*.spec
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+Thumbs.db
+*.log
+
+# App data
+journal.db
+*.db
+
+# Binaries
+*.dll
+*.exe
+
+
