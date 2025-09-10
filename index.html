@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal App - Your Digital Bullet Journal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --pastel-sage: #c3d5c1;
+            --pastel-pink: #f5d5d9;
+            --pastel-yellow: #fff4d6;
+            --pastel-blue: #d4e4f7;
+            --pastel-lavender: #e4d5f7;
+            --text-dark: #2c3e50;
+            --text-light: #5a6c7d;
+            --white: #ffffff;
+            --cream: #fdfbf7;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, var(--cream) 0%, var(--pastel-yellow) 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        nav {
+            padding: 20px 0;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo::before {
+            content: "•";
+            font-size: 30px;
+            color: var(--pastel-sage);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 100px;
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .hero .tagline {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            margin-bottom: 40px;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.4s forwards;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-family: inherit;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: var(--pastel-sage);
+            color: var(--text-dark);
+            box-shadow: 0 4px 15px rgba(195, 213, 193, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(195, 213, 193, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--text-dark);
+            border: 2px solid var(--pastel-pink);
+            box-shadow: 0 4px 15px rgba(245, 213, 217, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: var(--pastel-pink);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(245, 213, 217, 0.4);
+        }
+
+        /* Features */
+        .features {
+            padding: 60px 0;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
+            border-radius: 20px;
+            margin: 40px 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 20px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+            animation-delay: calc(var(--i) * 0.1s);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            background: var(--pastel-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .feature:nth-child(2) .feature-icon {
+            background: var(--pastel-pink);
+        }
+
+        .feature:nth-child(3) .feature-icon {
+            background: var(--pastel-lavender);
+        }
+
+        .feature:nth-child(4) .feature-icon {
+            background: var(--pastel-yellow);
+        }
+
+        .feature:hover .feature-icon {
+            transform: rotate(360deg) scale(1.1);
+        }
+
+        .feature h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .feature p {
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        /* Demo Section */
+        .demo {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .demo h2 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .demo-preview {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin: 40px auto;
+            max-width: 800px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .demo-preview::before {
+            content: "• • •";
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            color: var(--pastel-sage);
+            font-size: 20px;
+            letter-spacing: 5px;
+        }
+
+        .demo-content {
+            margin-top: 30px;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            color: var(--text-dark);
+            line-height: 2;
+        }
+
+        .demo-entry {
+            margin: 15px 0;
+            padding: 10px;
+            border-left: 3px solid var(--pastel-sage);
+            background: rgba(195, 213, 193, 0.1);
+            animation: slideIn 0.5s ease forwards;
+            opacity: 0;
+            animation-delay: calc(var(--i) * 0.2s);
+        }
+
+        /* Newsletter */
+        .newsletter {
+            padding: 80px 0;
+            background: linear-gradient(135deg, var(--pastel-blue) 0%, var(--pastel-lavender) 100%);
+            border-radius: 20px;
+            margin: 40px 0;
+        }
+
+        .newsletter h2 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .newsletter-form {
+            max-width: 500px;
+            margin: 40px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 8px;
+            color: var(--text-dark);
+            letter-spacing: 1px;
+        }
+
+        .form-group input {
+            padding: 15px;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            background: var(--white);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--pastel-sage);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-submit {
+            background: var(--pastel-sage);
+            color: var(--text-dark);
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            font-family: inherit;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(195, 213, 193, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .tagline {
+                font-size: 1.1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .demo h2, .newsletter h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="logo">Journal App</div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Journal App</h1>
+            <p class="tagline">Your Digital Bullet Journal - Simple, Powerful, Personal</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">Download Now</a>
+                <a href="#" class="btn btn-secondary">Get Started</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features container">
+        <div class="features-grid">
+            <div class="feature" style="--i: 1">
+                <div class="feature-icon">✍️</div>
+                <h3>Signature Inputs</h3>
+                <p>Personalize your entries with unique signature inputs for a truly custom experience</p>
+            </div>
+            <div class="feature" style="--i: 2">
+                <div class="feature-icon">#</div>
+                <h3>Markdown Support</h3>
+                <p>Write naturally with full markdown language support for formatting and organization</p>
+            </div>
+            <div class="feature" style="--i: 3">
+                <div class="feature-icon">⚡</div>
+                <h3>Custom Bindings</h3>
+                <p>Create your own shortcuts and bindings for lightning-fast journaling</p>
+            </div>
+            <div class="feature" style="--i: 4">
+                <div class="feature-icon">📅</div>
+                <h3>Daily Logs</h3>
+                <p>Keep track of your daily thoughts, tasks, and events in organized logs</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="demo">
+        <div class="container">
+            <h2>See It In Action</h2>
+            <div class="demo-preview">
+                <div class="demo-content">
+                    <div class="demo-entry" style="--i: 1">
+                        <strong>• Monday, December 11</strong><br>
+                        ✓ Morning meditation<br>
+                        → Project deadline moved to Friday<br>
+                        ! Call mom for her birthday
+                    </div>
+                    <div class="demo-entry" style="--i: 2">
+                        <strong>• Tuesday, December 12</strong><br>
+                        × Team meeting cancelled<br>
+                        • Started reading new book<br>
+                        ✓ Completed workout routine
+                    </div>
+                    <div class="demo-entry" style="--i: 3">
+                        <strong>• Wednesday, December 13</strong><br>
+                        → Planning next week's schedule<br>
+                        ! Important: Doctor appointment at 3pm<br>
+                        • Ideas for weekend project
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter">
+        <div class="container">
+            <h2>Stay Updated</h2>
+            <p style="text-align: center; color: var(--text-light); margin-bottom: 30px;">
+                Be the first to know about new features and updates
+            </p>
+            <form class="newsletter-form" onsubmit="handleSubmit(event)">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required placeholder="Your name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="your@email.com">
+                </div>
+                <button type="submit" class="btn-submit">Join Waitlist</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Journal App. Crafted with care for mindful journaling.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll effect for navigation
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+            } else {
+                nav.style.boxShadow = 'none';
+            }
+        });
+
+        // Newsletter form handler
+        function handleSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            
+            // Here you would normally send this data to your backend
+            alert(`Thank you ${name}! We'll keep you updated at ${email}`);
+            
+            // Reset form
+            event.target.reset();
+        }
+
+        // Add subtle animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for scroll animations
+        document.querySelectorAll('.feature, .demo-entry').forEach(el => {
+            el.style.transition = 'all 0.6s ease';
+            el.style.transform = 'translateY(20px)';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
