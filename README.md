@@ -13,3 +13,5 @@ Instalação:
 Notas:
 - A base de dados `journal.db` é criada no diretório do projeto.
 - A app abre o dia atual automaticamente; use Ctrl+S para guardar.
+
+teste
